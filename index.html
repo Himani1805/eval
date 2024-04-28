@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h1{
+            text-align: center;
+        }
+        select {
+            background-color: white;
+            border: 1px solid gray;
+            border-radius: 1%;
+        }
+        #black{
+            background-color: #F2F2F2;
+        }
+
+    </style>
+</head>
+<body>
+    <button id="catch">Fetch</button>
+    <div id="root">
+        <h1>Employee Management System</h1>
+        <form >
+            <label for="">Filter by Department</label>
+            <select id="department">
+                <option value="selectDepartment">--Select by Department--</option>
+                <option value="Operations">Operations</option>
+                <option value="HR">HR</option>
+                <option value="Finance">Finance</option>
+                <option value="Engineering">Engineering</option>
+            </select>
+
+            <label for="">Filter by Gender</label>
+            <select id="gender">
+                <option value=""></option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+            </select>
+
+            <label for="">Sort by Salary:</label>
+            <select id="salary">
+                <option value="Low">Low to High</option>
+                <option value="High">Hight to Low</option>
+            </select>
+        </form>
+        <br><br>
+        <table id="table">
+            <thead id="black">
+                <tr>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Department</th>
+                    <th>Salary</th>
+                </tr> 
+            </thead>
+            <tbody id="dataAppend">
+
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    let root = document.getElementById("root");
+    let form = document.querySelector("form");
+    let department = document.getElementById("department");
+    let gender = document.getElementById("gender");
+    let salary = document.getElementById("salary")
+    let dataAppend =document.getElementById("dataAppend");
+
+
+    let button = document.getElementById("catch");
+    button.addEventListener("click", function(){
+        async function dataFetch(){
+            let data = await fetch("https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-employees")
+            let response = await data.json()
+            console.log(response.data)
+            dataRender(response.data)
+        }
+        dataFetch()
+    })
+    function dataRender(response){
+        response.forEach(function(ele, index){
+            let card = document.createElement("div")
+            let id = document.createElement("p")
+            let image = document.createElement("img")
+            card.setAttribute("id","card")
+
+            let name = document.createElement("p")
+            let gender = document.createElement("p");
+            let department = document.createElement("p");
+            let salary = document.createElement("p")
+
+            image.src = ele.image;
+            id.innerText = ele.id;
+            name.innerText = ele.name;
+            gender.innerText = ele.gender;
+            department.innerText = ele.department;
+            salary.innertext = ele.salary
+
+            card.append(id,image,name,gender,department,salary);
+            root.append(card)
+
+
+        })
+    }
+
+</script>
